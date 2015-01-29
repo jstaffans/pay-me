@@ -4,6 +4,7 @@
             [pay-me.component.payment-provider :refer :all]
             [com.stuartsierra.component :as component]))
 
+; Stub the reporting component
 (def reporting-stub
   {:report-chan (async/chan)})
 

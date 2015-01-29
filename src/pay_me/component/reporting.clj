@@ -1,8 +1,7 @@
 (ns pay-me.component.reporting
   (:require [com.stuartsierra.component :as component]
             [clojure.core.async :as async]
-            [taoensso.timbre :refer [info error]]
-            [schema.core :as s]))
+            [taoensso.timbre :refer [info]]))
 
 (defrecord Reporting [storage]
   component/Lifecycle
@@ -43,5 +42,7 @@
       :loop-chan nil
       :events nil)))
 
+; Create a reporting component with a simple atom as the backing storage.
+; Normally we would use a database of some sort.
 (defn reporting []
   (->Reporting (atom ())))

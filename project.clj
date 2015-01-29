@@ -30,8 +30,10 @@
   :main ^:skip-aot pay-me.main
   :aliases {"gen"   ["generate"]
             "setup" ["do" ["generate" "locals"]]}
-  :uberimage {:base-image "tifayuki/java:8"
-              :instructions "ENV PORT 3000"}
+  :uberimage {:tag "jstaffans/pay-me"
+              :base-image "tifayuki/java:8"
+              :instructions ["ENV PORT 3000"
+                             "EXPOSE 3000"]}
   :profiles
   {:dev  [:project/dev  :profiles/dev]
    :test [:project/test :profiles/test]
