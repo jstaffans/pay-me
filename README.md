@@ -5,6 +5,12 @@ The different components are hooked up using core/async channels.
 
 ### Developing
 
+```
+$> lein cljsbuild auto
+```
+
+and 
+
 ```sh
 lein repl
 user=> (go)
