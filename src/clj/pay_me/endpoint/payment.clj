@@ -32,7 +32,7 @@
       [:link
        {:href "/assets/normalize.css/normalize.css", :rel "stylesheet"}]
       [:link {:href "/css/site.css", :rel "stylesheet"}]]
-     (conj body (include-js "/assets/jquery/jquery.js" "/js/main.js"))]))
+     (conj body (include-js "/assets/jquery/jquery.js" "/js/main.js" "/js/app.js"))]))
 
 (defn payment-page []
   (layout

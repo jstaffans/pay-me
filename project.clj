@@ -20,30 +20,52 @@
                  [com.taoensso/timbre "3.3.1"]
                  [prismatic/schema "0.3.4"]
                  [clj-time "0.9.0"]
-                 [puppetlabs/kitchensink "1.0.0"]]
+                 [puppetlabs/kitchensink "1.0.0"]
+                 [org.clojure/clojurescript "0.0-2719"]
+                 [com.facebook/react "0.11.2"]
+                 [reagent "0.4.3"]
+                 [reagent-forms "0.4.3"]
+                 [reagent-utils "0.1.2"]]
 
   :plugins [[lein-environ "1.0.0"]
             [lein-gen "0.2.2"]
+            [lein-cljsbuild "1.0.4"]
             [com.palletops/uberimage "0.4.1"]]
+
   :generators [[duct/generators "0.1.0"]]
+
   :duct {:ns-prefix pay-me}
   :main ^:skip-aot pay-me.main
   :aliases {"gen"   ["generate"]
             "setup" ["do" ["generate" "locals"]]}
+
   :uberimage {:tag "jstaffans/pay-me"
               :base-image "tifayuki/java:8"
-              :instructions ["ENV PORT 3000"
-                             "EXPOSE 3000"]}
-  :profiles
-  {:dev  [:project/dev  :profiles/dev]
-   :test [:project/test :profiles/test]
-   :uberjar {:aot :all}
-   :profiles/dev  {}
-   :profiles/test {}
-   :project/dev   {:source-paths ["dev"]
-                   :repl-options {:init-ns user}
-                   :dependencies [[reloaded.repl "0.1.0"]
-                                  [org.clojure/tools.namespace "0.2.8"]
-                                  [kerodon "0.5.0"]]
-                   :env {:port 3000}}
-   :project/test  {}})
+              :instructions ["RUN mkdir -p /var/log/pay-me"
+                             "ENV PORT 3000"
+                             "EXPOSE 3000"]
+              :files {"run.sh" "docker/run.sh"}
+              :cmd ["/bin/sh" "/run.sh"]}
+
+  :source-paths ["src/clj"  "src/cljs"]
+
+  :clean-targets ^{:protect false} ["target" "resources/public/js"]
+
+  :cljsbuild {:builds {:app {:source-paths ["src/cljs"]
+                             :compiler     {:output-to     "resources/public/js/app.js"
+                                            :optimizations :whitespace
+                                            :externs       ["react/externs/react.js"]
+                                            :pretty-print  true}}}}
+
+  :profiles {:dev  {:source-paths ["dev"]
+                    :repl-options {:init-ns user}
+                    :dependencies [[reloaded.repl "0.1.0"]
+                                   [org.clojure/tools.namespace "0.2.8"]
+                                   [kerodon "0.5.0"]]
+                    :env {:port 3000}}
+
+             :uberjar {:hooks     [leiningen.cljsbuild]
+                       :aot       :all
+                       :cljsbuild {:jar true
+                                   :builds {:app {:compiler {:optimizations :advanced
+                                                             :pretty-print  false}}}}}})
