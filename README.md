@@ -26,3 +26,7 @@ user=> (reset)
 Use `lein uberimage` to package the service as a Docker image. 
 Note that the `uberimage` plugin expects the Docker API to be available on <http://127.0.0.1:2375>. At least on OS X, 
 a [workaround](https://github.com/boot2docker/boot2docker/issues/573) is necessary to expose the API. 
+
+When running in the Docker container, the application is started using a [shell script](https://github.com/jstaffans/pay-me/blob/master/docker/run.sh).
+Logging is redirected to `/var/log/pay-me/pay-me.log`. This is simply because this is the pattern of logging I tend to follow
+when deploying Docker containers (gather logs on host, store them somewhere).
