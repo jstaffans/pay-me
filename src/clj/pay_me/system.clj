@@ -11,14 +11,15 @@
             [ring.middleware.webjars :refer [wrap-webjars]]
             [pay-me.component.reporting :refer [reporting]]
             [pay-me.component.payment-provider :refer [new-payment-provider]]
-            [pay-me.endpoint.payment :refer [payment-endpoint]]))
+            [pay-me.endpoint.payment :refer [payment-endpoint]]
+            [pay-me.endpoint.verification :refer [verification-endpoint]]))
 
 (def base-config
   {:app {:middleware [[wrap-not-found :not-found]
                       [wrap-webjars]
                       [wrap-defaults :defaults]]
          :not-found  (io/resource "errors/404.html")
-         :defaults   site-defaults}})
+         :defaults   (assoc-in site-defaults [:security :anti-forgery] false)}})
 
 (defn new-system [config]
   (let [config (meta-merge base-config config)]
@@ -27,10 +28,12 @@
           :reporting          (reporting)
           :app                (handler-component (:app config))
           :http               (jetty-server (:http config))
+          :verification       (endpoint-component verification-endpoint)
           :payment            (endpoint-component payment-endpoint))
         (component/system-using
           {:http              [:app]
-           :app               [:payment]
+           :app               [:payment :verification]
            :payment-provider  [:reporting]
            :reporting         []
+           :verification      []
            :payment           [:payment-provider :reporting]}))))

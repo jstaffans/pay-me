@@ -32,8 +32,12 @@
 
   :generators [[duct/generators "0.1.0"]]
 
+  ; Note: does not generate files in the right place anymore (src/clj).
+  ; A "path" parameter would be nice to have.
   :duct {:ns-prefix pay-me}
+
   :main ^:skip-aot pay-me.main
+
   :aliases {"gen"   ["generate"]
             "setup" ["do" ["generate" "locals"]]}
 
@@ -46,6 +50,8 @@
               :cmd ["/bin/sh" "/run.sh"]}
 
   :source-paths ["src/clj"  "src/cljs"]
+
+  :test-paths ["test/clj"]
 
   :clean-targets ^{:protect false} ["target" "resources/public/js"]
 

@@ -1,6 +1,5 @@
 (ns pay-me.endpoint.payment-test
-  (:require [com.stuartsierra.component :as component]
-            [clojure.test :refer :all]
+  (:require [clojure.test :refer :all]
             [kerodon.core :refer :all]
             [kerodon.test :refer :all]
             [pay-me.endpoint.payment :as payment]))
