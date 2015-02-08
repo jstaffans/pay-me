@@ -20,7 +20,7 @@
     (let [pay-chan (async/chan)
           payment-handler (:payment-handler payment-provider)
           result-chan (payment-handler pay-chan)]
-      (async/>!! pay-chan "1234")
+      (async/>!! pay-chan {:number "1234" :token "secure_token"})
       (is (= :charge-successful (async/<!! result-chan))))
 
     ; Test that an event is put on the report channel
