@@ -15,15 +15,15 @@
   []
   [:div.payment-form
    (f/form-to
-     {:id "pay"}
+     {:id "pay-form" :name "pay-form"}
      [:post "/pay"]
      (f/text-field :number)
      (anti-forgery-field)
-     [:a.pay-button {:onclick "Payment.submitPaymentForm();"} "Pay!"])
+     [:a.pay-button {:id "pay-button"} "Pay!"])
    [:div.loader "Loading"]])
 
 (defn layout
-  [body]
+  [body cljs-init-ns]
   (html5
     [:html.payment
      {:lang "en"}
@@ -32,14 +32,17 @@
       [:link
        {:href "/assets/normalize.css/normalize.css", :rel "stylesheet"}]
       [:link {:href "/css/site.css", :rel "stylesheet"}]]
-     (conj body (include-js "/assets/jquery/jquery.js" "/js/main.js" "/js/app.js"))]))
+     (conj body
+           (include-js "/js/app.js")
+           (when cljs-init-ns [:script (str cljs-init-ns ".init();")]))]))
 
 (defn payment-page []
   (layout
     [:body
      [:h2 "Welcome to the Acme bank"]
      [:h3 "Why don't you go right ahead and enter your credit card number here and we'll charge a random amount:"]
-     (payment-form)]))
+     (payment-form)]
+    "pay_me.form"))
 
 (defn confirmation-page [result]
   (layout
@@ -52,8 +55,8 @@
        [:thead
         [:tr
          [:th "Number"] [:th "Sum"] [:th "Result"] [:th "Timestamp"]]]
-       [:tbody]]]
-     ]))
+       [:tbody]]]]
+    "pay_me.confirm"))
 
 (defn site-routes [config]
   (routes

@@ -15,7 +15,6 @@
                  [ring-jetty-component "0.2.2"]
                  [ring-webjars "0.1.0"]
                  [org.webjars/normalize.css "3.0.1"]
-                 [org.webjars/jquery "2.1.3"]
                  [hiccup "1.0.5"]
                  [com.taoensso/timbre "3.3.1"]
                  [prismatic/schema "0.3.4"]
