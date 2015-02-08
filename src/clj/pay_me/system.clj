@@ -19,6 +19,7 @@
                       [wrap-webjars]
                       [wrap-defaults :defaults]]
          :not-found  (io/resource "errors/404.html")
+         ; Remove anti-forgery from defaults. Add it only for the routes that need it.
          :defaults   (assoc-in site-defaults [:security :anti-forgery] false)}})
 
 (defn new-system [config]
