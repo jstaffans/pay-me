@@ -1,15 +1,15 @@
 (ns pay-me.endpoint.payment
-  (:require [ring.middleware.json :as json]
-            [puppetlabs.kitchensink.json :refer [add-common-json-encoders!*]]
+  (:require [ring.middleware.transit :refer [wrap-transit-response]]
+            [cognitect.transit :as transit]
+            [clj-time.coerce :as coerce]
             [ring.util.response :refer [response content-type]]
             [ring.util.anti-forgery :refer [anti-forgery-field]]
             [compojure.core :refer :all]
             [hiccup.core :refer :all]
             [hiccup.page :refer [html5 include-js]]
             [hiccup.form :as f]
-            [clojure.core.async :as async]))
-
-(add-common-json-encoders!*)
+            [clojure.core.async :as async])
+  (:import (org.joda.time DateTime)))
 
 (defn- payment-form
   []
@@ -74,10 +74,17 @@
       (let [events @(:events (:reporting config))]
         (response events)))))
 
+(defn transit-routes [config]
+  "Wraps api routes with Transit boilerplate stuff."
+  (let [joda-time-writer (transit/write-handler
+                           (constantly "m")
+                           #(-> % coerce/to-date .getTime)
+                           #(-> % coerce/to-date .getTime .toString))]
+    (wrap-transit-response
+      (api-routes config)
+      {:opts {:handlers {DateTime joda-time-writer}}})))
+
 (defn payment-endpoint [config]
   (routes
     (site-routes config)
-    (json/wrap-json-response (api-routes config))))
-
-
-
+    (transit-routes config)))
