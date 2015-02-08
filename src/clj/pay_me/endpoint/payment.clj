@@ -28,7 +28,7 @@
     [:html.payment
      {:lang "en"}
      [:head
-      [:title "Welcome to pay-me"]
+      [:title "pay-me"]
       [:link
        {:href "/assets/normalize.css/normalize.css", :rel "stylesheet"}]
       [:link {:href "/css/site.css", :rel "stylesheet"}]]

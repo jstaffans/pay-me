@@ -22,10 +22,8 @@
                  [clj-time "0.9.0"]
                  [puppetlabs/kitchensink "1.0.0"]
                  [org.clojure/clojurescript "0.0-2719"]
-                 [com.facebook/react "0.11.2"]
-                 [reagent "0.4.3"]
-                 [reagent-forms "0.4.3"]
-                 [reagent-utils "0.1.2"]]
+                 [domina "1.0.3"]
+                 [secretary "1.2.1"]]
 
   :plugins [[lein-environ "1.0.0"]
             [lein-gen "0.2.2"]
@@ -54,7 +52,6 @@
   :cljsbuild {:builds {:app {:source-paths ["src/cljs"]
                              :compiler     {:output-to     "resources/public/js/app.js"
                                             :optimizations :whitespace
-                                            :externs       ["react/externs/react.js"]
                                             :pretty-print  true}}}}
 
   :profiles {:dev  {:source-paths ["dev"]

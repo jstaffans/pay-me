@@ -1,8 +1,24 @@
 (ns pay-me.core
-  (:require [clojure.string :as string]
-            [reagent.core :as r]))
+  (:require [secretary.core :as secretary :include-macros true]
+            [goog.events :as events]
+            [goog.history.EventType :as EventType])
+  (:import goog.History))
 
-(enable-console-print!)
+(secretary/defroute "/" []
+  (js/console.log "Home"))
 
+;
+; secretary boilerplate
+;
+(defn hook-browser-navigation! []
+  (doto (History.)
+    (events/listen
+      EventType/NAVIGATE
+      (fn [event]
+        (secretary/dispatch! (.-token event))))
+    (.setEnabled true)))
 
-(print "foobar 3")
+(defn init! []
+  (hook-browser-navigation!))
+
+(init!)
