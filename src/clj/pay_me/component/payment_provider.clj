@@ -6,8 +6,8 @@
 
 ; Actual method interacting with an imaginary credit card service.
 ; Stubbed out in unit tests.
-(defn- charge-credit-card [number sum]
-  (info "Charging" sum "from card number" number)
+(defn- charge-credit-card [token sum]
+  (info "Charging" sum "using token" token)
   (Thread/sleep (rand-int 2000))
   :ok)
 
@@ -16,19 +16,20 @@
 ; the result will be put on.
 (defn- payment-handler [report-chan in-chan]
   (async/go
-    (let [number (async/<! in-chan)
-          sum (rand-int 5000)
-          payment-chan (async/thread
-                         (charge-credit-card number sum))
-          timeout-chan (async/timeout 1200)
-          result  (async/alt!
-                    payment-chan ([res] res)
-                    timeout-chan ([_] :timeout))]
+    (let [{:keys [number token]}  (async/<! in-chan)
+          sum                     (rand-int 5000)
+          payment-chan            (async/thread
+                                    (charge-credit-card token sum))
+          timeout-chan            (async/timeout 1200)
+          result                  (async/alt!
+                                    payment-chan ([res] res)
+                                    timeout-chan ([_] :timeout))]
+
       ; Schema will validate the event when we try to put it on the channel because of the ^:always-validate
       ; metadata attached to the function that generates it. Reason: we don't want to leak bad data out of
       ; our namespace. Normally we would of course validate the data on input.
       (try
-        (async/put! report-chan (payment-event number sum result))
+        (async/put! report-chan (payment-event number token sum result))
         result
         (catch Exception e
           (error e)

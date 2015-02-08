@@ -11,10 +11,11 @@
 
 (s/defrecord PaymentEvent
   [number    :- s/Str
+   token     :- s/Str
    sum       :- s/Num
    result    :- s/Keyword
    timestamp :- DateTime])
 
 (s/defn ^:always-validate payment-event :- PaymentEvent
-  [number sum result]
-  (PaymentEvent. number sum result (ct/now)))
+  [number token sum result]
+  (PaymentEvent. number token sum result (ct/now)))

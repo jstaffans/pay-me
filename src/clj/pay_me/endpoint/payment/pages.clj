@@ -47,7 +47,7 @@
       [:table
        [:thead
         [:tr
-         [:th "Number"] [:th "Sum"] [:th "Result"] [:th "Timestamp"]]]
+         [:th "Number"] [:th "Token"] [:th "Sum"] [:th "Result"] [:th "Timestamp"]]]
        [:tbody]]]]
     "pay_me.confirm"))
 

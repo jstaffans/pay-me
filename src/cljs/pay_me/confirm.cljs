@@ -11,6 +11,7 @@
 (defn payment-row [payment]
   (str "<tr>"
        "<td>" (:number payment) "</td>"
+       "<td>" (:token payment)  "</td>"
        "<td>" (:sum payment)    "</td>"
        "<td>" (:result payment) "</td>"
        "<td>" (->> (:timestamp payment) tc/from-long (tf/unparse date-time-formatter)) "</td>"

@@ -12,11 +12,11 @@
 (defn site-routes [config]
   (-> (routes
         (GET "/" [] (pages/payment-page))
-        (POST "/pay" [number]
+        (POST "/pay" [number token]
           (let [payment-handler (get-in config [:payment-provider :payment-handler])
                 payment-chan (async/chan)
                 result-chan (payment-handler payment-chan)]
-            (async/>!! payment-chan number)
+            (async/>!! payment-chan {:number number :token token})
             (pages/confirmation-page (async/<!! result-chan)))))
 
       ; wrap the payment form with anti-forgery, but don't interfere with other endpoints using POST
