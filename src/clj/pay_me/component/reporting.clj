@@ -44,5 +44,5 @@
 
 ; Create a reporting component with a simple atom as the backing storage.
 ; Normally we would use a database of some sort.
-(defn reporting []
+(defn new-reporting []
   (->Reporting (atom ())))

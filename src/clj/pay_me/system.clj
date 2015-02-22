@@ -9,7 +9,7 @@
             [ring.component.jetty :refer [jetty-server]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [ring.middleware.webjars :refer [wrap-webjars]]
-            [pay-me.component.reporting :refer [reporting]]
+            [pay-me.component.reporting :refer [new-reporting]]
             [pay-me.component.payment-provider :refer [new-payment-provider]]
             [pay-me.endpoint.payment :refer [payment-endpoint]]
             [pay-me.endpoint.verification :refer [verification-endpoint]]))
@@ -26,7 +26,7 @@
   (let [config (meta-merge base-config config)]
     (-> (component/system-map
           :payment-provider   (new-payment-provider)
-          :reporting          (reporting)
+          :reporting          (new-reporting)
           :app                (handler-component (:app config))
           :http               (jetty-server (:http config))
           :verification       (endpoint-component verification-endpoint)
