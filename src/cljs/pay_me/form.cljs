@@ -9,7 +9,6 @@
   "Takes a credit card number and garbles a portion of it."
   (clojure.string/replace number #"\B." "*"))
 
-
 (defn get-token-and-submit! []
   (let [c (chan)]
     (POST "/verification" {:handler (fn [response] (go (>! c response)))})

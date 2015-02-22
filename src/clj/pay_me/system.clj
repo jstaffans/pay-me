@@ -34,7 +34,7 @@
         (component/system-using
           {:http              [:app]
            :app               [:payment :verification]
-           :payment-provider  [:reporting]
+           :payment-provider  []
            :reporting         []
            :verification      []
            :payment           [:payment-provider :reporting]}))))
